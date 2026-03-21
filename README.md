@@ -99,7 +99,7 @@ One-click monthly report download. Includes summary cards, overspend analysis pe
 | Resource | URL |
 |----------|-----|
 | 🌐 Live App | https://pocketwise.onrender.com |
-| 📦 GitHub | https://github.com/YOUR_USERNAME/pocketwise |
+| 📦 GitHub | https://github.com/agameraki/pocketwise |
 
 ---
 
