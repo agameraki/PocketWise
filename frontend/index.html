@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PocketWise – Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
+</head>
+<body class="auth-page">
+
+  <!-- LEFT PANEL — Branding -->
+  <div class="auth-left">
+    <div class="auth-brand-block">
+
+      <div class="auth-logo">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="14" stroke="white" stroke-width="2" stroke-opacity="0.3"/>
+          <path d="M11 17h12M17 11v12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="17" cy="17" r="4" fill="white" fill-opacity="0.85"/>
+        </svg>
+      </div>
+
+      <h1 class="auth-brand-name">PocketWise</h1>
+      <p class="auth-brand-tagline">
+        Your smart financial co-pilot. Track spending, set budgets, plan goals — all in one place.
+      </p>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <span>Real-time expense tracking with smart insights</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🎯</div>
+          <span>Goal-based affordability planning</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🧠</div>
+          <span>Dynamic budget alerts and overspend warnings</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📄</div>
+          <span>Monthly PDF report export</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — Form -->
+  <div class="auth-right">
+    <div class="auth-form-container">
+
+      <div class="auth-form-header">
+        <h2 class="auth-form-title">Welcome back</h2>
+        <p class="auth-form-sub">Sign in to your account to continue</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"  onclick="switchTab('login')">Login</button>
+        <button class="auth-tab"        id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- Alert -->
+      <div class="auth-alert hidden" id="auth-alert"></div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form" onsubmit="handleLogin(event)" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email address</label>
+          <input type="email" id="login-email" class="form-input"
+            placeholder="you@example.com" required autocomplete="email" />
+          <span class="field-error hidden" id="login-email-err"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="login-password" class="form-input"
+              placeholder="Enter your password" required autocomplete="current-password" />
+            <button type="button" class="toggle-pw" onclick="togglePassword('login-password', this)">Show</button>
+          </div>
+          <span class="field-error hidden" id="login-pw-err"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          <span class="btn-text">Login</span>
+          <span class="btn-loader hidden">Logging in...</span>
+        </button>
+
+      </form>
+
+      <!-- Signup Form -->
+      <form class="auth-form hidden" id="signup-form" onsubmit="handleSignup(event)" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-name">Full name</label>
+          <input type="text" id="signup-name" class="form-input"
+            placeholder="Your full name" required autocomplete="name" />
+          <span class="field-error hidden" id="signup-name-err"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email address</label>
+          <input type="email" id="signup-email" class="form-input"
+            placeholder="you@example.com" required autocomplete="email" />
+          <span class="field-error hidden" id="signup-email-err"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="signup-password" class="form-input"
+              placeholder="Minimum 6 characters" required autocomplete="new-password" />
+            <button type="button" class="toggle-pw" onclick="togglePassword('signup-password', this)">Show</button>
+          </div>
+          <span class="field-error hidden" id="signup-pw-err"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm">Confirm password</label>
+          <div class="input-wrapper">
+            <input type="password" id="signup-confirm" class="form-input"
+              placeholder="Re-enter your password" required autocomplete="new-password" />
+            <button type="button" class="toggle-pw" onclick="togglePassword('signup-confirm', this)">Show</button>
+          </div>
+          <span class="field-error hidden" id="signup-confirm-err"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="signup-btn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-loader hidden">Creating account...</span>
+        </button>
+
+      </form>
+
+      <p class="auth-footer">
+        <span id="auth-footer-text">Don't have an account?</span>
+        <a href="#" id="auth-footer-link" onclick="switchTab('signup'); return false;">Sign Up</a>
+      </p>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

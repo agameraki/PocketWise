@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PocketWise – Budget</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <span class="brand-name">PocketWise</span>
+        <span class="brand-sub">Smart Finance</span>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="user-avatar">U</div>
+      <div class="sidebar-user-info">
+        <span id="sidebar-user-name">Loading...</span>
+        <span id="sidebar-user-income">₹0 / month</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span>Dashboard</a>
+      <a href="expenses.html"  class="nav-item"><span class="nav-icon">💸</span>Expenses</a>
+      <a href="budget.html"    class="nav-item active"><span class="nav-icon">💰</span>Budget</a>
+      <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span>Analytics</a>
+      <a href="goals.html"     class="nav-item"><span class="nav-icon">🎯</span>Goals</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-theme" id="theme-toggle-btn" onclick="toggleTheme()">☀️ Light mode</button>
+      <button class="btn-logout" onclick="logout()">→ Logout</button>
+    </div>
+  </aside>
+
+  <div class="topbar" id="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo"></div>
+      <span class="topbar-name">PocketWise</span>
+    </div>
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  </div>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h1>Budget Manager</h1>
+        <p>Manage your monthly category allocations</p>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="generatePDFReport()">📄 Export PDF</button>
+    </div>
+
+    <div class="page-alert hidden" id="budget-alert"></div>
+
+    <!-- Loading / content toggle -->
+    <div id="budget-loading" class="loading-spinner hidden">
+      <div class="spinner"></div>
+      <p>Loading budget...</p>
+    </div>
+
+    <div id="budget-content">
+
+      <!-- Header summary cards — IDs match budget.js -->
+      <div class="budget-header-cards">
+        <div class="stat-card">
+          <span class="stat-icon">💰</span>
+          <div class="stat-label">Monthly Income</div>
+          <div class="stat-value" id="budget-income">₹0</div>
+          <div class="stat-sub" id="budget-month-label">This month</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📋</span>
+          <div class="stat-label">Allocated</div>
+          <div class="stat-value" id="budget-allocated">₹0</div>
+          <div class="stat-sub" id="budget-unallocated">₹0 unallocated</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">💸</span>
+          <div class="stat-label">Spent</div>
+          <div class="stat-value" id="budget-spent">₹0</div>
+          <div class="stat-sub" id="budget-used-pct">0% of income</div>
+        </div>
+      </div>
+
+      <!-- Overall progress bar -->
+      <div class="card mb-md">
+        <div class="card-header">
+          <h3>Overall Budget Usage</h3>
+          <span class="stat-sub" id="budget-remaining">₹0 remaining</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill progress-success" id="budget-overall-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Update Income -->
+      <div class="card mb-md">
+        <div class="card-header">
+          <h3>Update Monthly Income</h3>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:180px;margin-bottom:0">
+            <label class="form-label" for="new-income">New Income (₹)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="new-income" class="form-input" placeholder="e.g. 50000" min="1" />
+            </div>
+          </div>
+          <button class="btn btn-primary" id="save-income-btn" onclick="saveIncome()">
+            <span class="btn-text">Update Income</span>
+            <span class="btn-loader hidden">Updating...</span>
+          </button>
+        </div>
+        <div class="auth-alert hidden mt-sm" id="income-modal-alert"></div>
+      </div>
+
+      <!-- Add new category -->
+      <div class="card mb-md">
+        <div class="card-header">
+          <h3>Add New Category</h3>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="form-group" style="flex:1;min-width:140px;margin-bottom:0">
+            <label class="form-label" for="cat-name">Category Name</label>
+            <input type="text" id="cat-name" class="form-input" placeholder="e.g. Gym, Netflix" maxlength="50" />
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px;margin-bottom:0">
+            <label class="form-label" for="cat-amount">Monthly Budget (₹)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">₹</span>
+              <input type="number" id="cat-amount" class="form-input" placeholder="e.g. 2000" min="0" />
+            </div>
+            <span class="cat-pct-preview" id="cat-pct-preview">0% of income</span>
+          </div>
+          <button class="btn btn-primary btn-sm" id="save-cat-btn" onclick="saveCategory()">
+            <span class="btn-text">+ Add</span>
+            <span class="btn-loader hidden">Adding...</span>
+          </button>
+        </div>
+        <div class="auth-alert hidden mt-sm" id="cat-modal-alert"></div>
+      </div>
+
+      <!-- Allocation chart + category cards -->
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;flex-wrap:wrap;" class="mb-md">
+        <div class="card">
+          <div class="card-header"><h3>Allocation</h3></div>
+          <canvas id="allocation-chart" style="max-height:220px"></canvas>
+          <div id="allocation-legend" class="donut-legend mt-sm"></div>
+        </div>
+        <div>
+          <div class="category-cards-grid" id="category-cards-grid">
+          </div>
+          <div class="empty-state hidden" id="categories-empty">
+            <p>No categories yet. Add one above!</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /budget-content -->
+
+  </main>
+
+  <!-- Edit Category Modal — IDs match budget.js openEditCategoryModal -->
+  <div class="modal-overlay hidden" id="category-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cat-modal-title">Edit Category</h3>
+        <button class="modal-close" onclick="closeCategoryModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-alert hidden" id="cat-modal-alert-inner"></div>
+        <div class="form-group">
+          <label class="form-label">Category Name</label>
+          <input type="text" id="cat-name-field" class="form-input" readonly aria-label="Category name" placeholder="Category name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cat-amount-modal">Monthly Budget (₹)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">₹</span>
+            <input type="number" id="cat-amount-modal" class="form-input" min="0" placeholder="e.g. 2000" aria-label="Category monthly budget amount" />
+          </div>
+          <span class="cat-pct-preview" id="cat-pct-preview-modal">0% of income</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeCategoryModal()">Cancel</button>
+        <button class="btn btn-primary" id="save-cat-modal-btn" onclick="saveCategoryModal()">
+          <span class="btn-text">Save</span>
+          <span class="btn-loader hidden">Saving...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Category Modal -->
+  <div class="modal-overlay hidden" id="delete-cat-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Category</h3>
+        <button class="modal-close" onclick="closeDeleteCatModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Delete category <strong id="delete-cat-name"></strong>? Expenses in this category won't be deleted.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeDeleteCatModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-cat-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/budget.js"></script>
+  <script src="js/pdf.js"></script>
+</body>
+</html>
