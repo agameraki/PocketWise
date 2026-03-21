@@ -155,4 +155,4 @@ PocketWise is a production-ready, full-stack FinTech application that solves a r
 
 *Built with 💚 and a lot of financial anxiety*
 
-Made by **Your Name** · [GitHub](https://github.com/YOUR_USERNAME) · [LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+
