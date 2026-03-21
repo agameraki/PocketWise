@@ -1,4 +1,5 @@
-PocketWise - Smart Financial Decision Assistant
+POCKETWISE
+Smart Financial Decision Assistant
 
 Because your money deserves a brain.
 
