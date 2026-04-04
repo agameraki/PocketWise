@@ -1095,3 +1095,77 @@ td               { padding: 14px 18px; color: var(--text-100); vertical-align: m
   table tbody td { display: flex; justify-content: space-between; padding: 8px 10px; font-size: 0.9rem; }
   table tbody td::before { content: attr(data-label); font-weight: 600; color: var(--text-400); font-size: 0.75rem; text-transform: uppercase; }
 }
+
+/* ───────────────────────────────────────────────────────────
+   RBAC — Role Switcher
+─────────────────────────────────────────────────────────── */
+.role-switcher-wrap {
+  padding:       10px 12px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 6px;
+}
+
+.role-badge {
+  display:        inline-block;
+  padding:        3px 10px;
+  border-radius:  var(--radius-full);
+  font-size:      0.72rem;
+  font-weight:    700;
+  margin-bottom:  6px;
+  letter-spacing: 0.04em;
+}
+
+.role-badge-admin  {
+  background: rgba(78,159,61,0.15);
+  color:      var(--accent-3);
+  border:     1px solid var(--border-strong);
+}
+
+.role-badge-viewer {
+  background: var(--info-bg);
+  color:      var(--info);
+  border:     1px solid var(--info-border);
+}
+
+.role-select {
+  width:         100%;
+  background:    var(--bg-elevated);
+  border:        1.5px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding:       8px 12px;
+  color:         var(--text-100);
+  font-size:     0.85rem;
+  font-family:   var(--font-body);
+  cursor:        pointer;
+  outline:       none;
+  transition:    border-color var(--trans);
+  appearance:    none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237aaa60' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:   no-repeat;
+  background-position: right 10px center;
+  padding-right:       32px;
+}
+
+.role-select:focus { border-color: var(--accent-2); }
+.role-select option { background: var(--bg-surface); color: var(--text-100); }
+
+/* Viewer read-only banner */
+.viewer-banner {
+  display:       flex;
+  align-items:   center;
+  gap:           10px;
+  padding:       10px 16px;
+  background:    var(--info-bg);
+  border:        1px solid var(--info-border);
+  border-radius: var(--radius-sm);
+  color:         var(--info);
+  font-size:     0.875rem;
+  margin-bottom: 16px;
+  animation:     slideDown 0.2s var(--ease);
+}
+
+.viewer-banner strong { font-weight: 700; }
+
+/* Admin-only elements — hidden by JS for viewers */
+/* (no CSS needed — handled via JS style.display) */
