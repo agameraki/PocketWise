@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PocketWise – Goals</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <span class="brand-name">PocketWise</span>
+        <span class="brand-sub">Smart Finance</span>
+      </div>
+    </a>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="user-avatar">U</div>
+      <div class="sidebar-user-info">
+        <span id="sidebar-user-name">Loading...</span>
+        <span id="sidebar-user-income">₹0 / month</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span>Dashboard</a>
+      <a href="expenses.html"  class="nav-item"><span class="nav-icon">💸</span>Expenses</a>
+      <a href="budget.html"    class="nav-item"><span class="nav-icon">💰</span>Budget</a>
+      <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span>Analytics</a>
+      <a href="goals.html"     class="nav-item active"><span class="nav-icon">🎯</span>Goals</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="role-switcher-wrap">
+      <div id="role-badge" class="role-badge role-badge-admin">👑 Admin</div>
+      <select id="role-switcher" class="role-select" aria-label="Switch role" onchange="switchRole(this.value)">
+        <option value="admin">👑 Admin — Full Access</option>
+        <option value="viewer">👁️ Viewer — Read Only</option>
+      </select>
+    </div>
+      <button class="btn-theme" id="theme-toggle-btn" onclick="toggleTheme()">☀️ Light mode</button>
+      <button class="btn-logout" onclick="logout()">→ Logout</button>
+    </div>
+  </aside>
+
+  <div class="topbar" id="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo"></div>
+      <span class="topbar-name">PocketWise</span>
+    </div>
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  </div>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h1>Financial Goals</h1>
+        <p>Set goals and track your affordability</p>
+      </div>
+      <button class="btn btn-primary admin-only" onclick="openAddGoalModal()">+ New Goal</button>
+    </div>
+
+    <div class="page-alert hidden" id="goals-alert"></div>
+    <div id="viewer-banner" class="viewer-banner" style="display:none">
+      <span>👁️ You are in <strong>Viewer mode</strong> — read-only access. Switch to Admin to make changes.</span>
+    </div>
+
+    <!-- Summary row -->
+    <div class="goals-summary-row">
+      <div class="stat-card">
+        <span class="stat-icon">🎯</span>
+        <div class="stat-label">Total Goals</div>
+        <div class="stat-value" id="goals-total">0</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">⚡</span>
+        <div class="stat-label">Active</div>
+        <div class="stat-value" id="goals-active">0</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">✅</span>
+        <div class="stat-label">Achieved</div>
+        <div class="stat-value" id="goals-achieved">0</div>
+      </div>
+    </div>
+
+    <!-- Loading / content -->
+    <div id="goals-loading" class="loading-spinner hidden">
+      <div class="spinner"></div>
+      <p>Loading goals...</p>
+    </div>
+
+    <div id="goals-content">
+      <div class="goals-grid" id="goals-grid">
+        <div class="empty-state" id="goals-empty">
+          <p>No goals yet.</p>
+          <p>Click <strong>+ New Goal</strong> to get started!</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Add/Edit Goal Modal -->
+  <div class="modal-overlay hidden" id="goal-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="goal-modal-title">New Goal</h3>
+        <button class="modal-close" onclick="closeGoalModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-alert hidden" id="goal-modal-alert"></div>
+        <div class="form-group">
+          <label class="form-label" for="goal-title">Goal Title</label>
+          <input type="text" id="goal-title" class="form-input" placeholder="e.g. Hotstar Subscription" maxlength="100" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="goal-amount">Target Amount (₹)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">₹</span>
+            <input type="number" id="goal-amount" class="form-input" placeholder="e.g. 499" min="1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="goal-deadline">Deadline (optional)</label>
+          <input type="date" id="goal-deadline" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="goal-notes">Notes (optional)</label>
+          <textarea id="goal-notes" class="form-textarea" rows="3" placeholder="Any notes about this goal..." maxlength="300"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeGoalModal()">Cancel</button>
+        <button class="btn btn-primary" id="save-goal-btn" onclick="saveGoal()">
+          <span class="btn-text">Save Goal</span>
+          <span class="btn-loader hidden">Saving...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Goal Modal -->
+  <div class="modal-overlay hidden" id="delete-goal-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Goal</h3>
+        <button class="modal-close" onclick="closeDeleteGoalModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-goal-name"></strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeDeleteGoalModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete-goal-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/goals.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/pdf.js"></script>
+</body>
+</html>
