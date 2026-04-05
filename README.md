@@ -10,94 +10,87 @@ Most young people in India earn, spend, and repeat — without ever knowing wher
 
 Here's the reality for millions of students and young professionals:
 
-💸 Salary credited on the 1st. By the 15th — gone. No idea why.
-📱 Paying for subscriptions they forgot about.
-🍕 Food delivery eating 40% of income without realising.
-🎯 "I'll save next month" — said every month, forever.
-📊 Banking apps show transactions. Not insights. Not warnings. Not what to do.
+💸 Salary credited on the 1st. By the 15th — gone. No idea why
+📱 Paying for subscriptions they forgot about
+🍕 Food delivery eating 40% of income without realising
+🎯 "I'll save next month" — said every month, forever
+📊 Banking apps show transactions — not insights, not warnings, not actions
 
-There is no simple, smart, free tool that tells a 22-year-old:
+There is no simple tool that tells a 22-year-old:
 
-"You've spent 85% of your food budget in 18 days. You're on track to overspend by ₹2,300 this month. Reduce your daily spend by ₹77 to stay on track."
+"You've spent 85% of your food budget in 18 days. You're on track to overspend by ₹2,300. Reduce your daily spend by ₹77."
 
-PocketWise solves exactly this. It is not just an expense tracker. It is a financial decision-making system that watches your money, learns your patterns, fires alerts before you overspend, and tells you in plain language what to do.
+💡 Solution
 
+PocketWise is not just an expense tracker.
+
+It is a financial decision-making system that:
+
+Tracks spending
+Learns patterns
+Predicts overspending
+Gives clear, actionable advice
 ⚙️ How It Works
 
 Complete workflow from sign up to smart decisions:
 
 1. 🔐 Authentication
-
-User signs up with name, email and password. Password hashed with bcrypt. JWT token issued and stored — every protected route verified via JWT middleware.
-
+User signs up with name, email and password
+Password hashed using bcrypt
+JWT token issued
+Protected routes secured via middleware
 2. 💰 Income & Budget Setup
-
-User enters monthly income. System auto-suggests category allocations based on income percentage.
-
-User can freely add, edit or delete categories — fully dynamic, no fixed list.
+User enters monthly income
+System suggests category allocations
+Fully dynamic categories
 
 Examples:
 Food ₹8,000 · Travel ₹5,000 · Netflix ₹499 · Gym ₹2,000
 
 3. 💸 Expense Tracking
-
-Add expenses with amount, category (free text), description and date.
-
-Category matches against user's budget — spending tracked in real time.
-
-Edit or delete any expense — budget automatically recalculates.
-
-Bulk import via CSV upload also supported.
-
+Add expense with:
+Amount
+Category
+Description
+Date
+Real-time tracking
+Edit/Delete supported
+CSV bulk upload supported
 4. 🧠 Smart Insight Engine
 
-Runs on every dashboard load — pure logic, zero AI APIs.
+Runs on every dashboard load — pure logic.
 
-Computes:
+Calculates:
 
-Budget usage percentage
+Budget usage %
 Daily average spend
-Week-on-week comparison
+Weekly trends
 Month-end projection
 
-Generates dynamic plain-English messages based on real numbers.
-
 Example:
 
-"At your current pace you will overspend by ₹3,200 this month."
+"At your current pace you will overspend by ₹3,200."
 
 5. 🚨 Overspending Alerts
-
-Each category monitored independently.
-
-Warning fires at 80% of budget used
-Danger fires when budget is exceeded
-
-Shown on dashboard in real time and included in the PDF report.
-
+⚠️ Warning at 80%
+❌ Danger at 100%
+Real-time alerts
+Included in reports
 6. 🎯 Goal-Based Planning
-
-User sets a financial goal with title, amount and optional deadline.
-
-System computes:
-
-Whether they can afford it now
+Set financial goals
+System calculates:
+Affordability
 Shortfall
-Safe daily limit
-Months needed to save
-
-Example:
-
-"Hotstar ₹499 — You need ₹312 more. Reduce daily spend by ₹42 for 8 days."
-
+Daily limit
+Time required
 7. 📊 Analytics Dashboard
 
 Four Chart.js charts:
 
 Pie chart → spending by category
-Bar chart → monthly trend (last 6 months)
-Line chart → daily spending (last 30 days)
-Weekly comparison with percentage change
+Bar chart → monthly trend (6 months)
+Line chart → daily spending (30 days)
+Weekly comparison with % change
 8. 📄 PDF Report Export
 
 One-click monthly report download.
@@ -105,35 +98,30 @@ One-click monthly report download.
 Includes:
 
 Summary cards
-Overspend analysis per category
-All expenses grouped by category
+Overspend analysis
+Expenses grouped by category
 Smart insights
-Concrete action plan
-9. 🔐 Role-Based Access Control (RBAC) (NEW)
+Action plan
+9. 🔐 Role-Based Access Control (RBAC)
 
-PocketWise includes RBAC to ensure secure and controlled access.
+PocketWise includes RBAC for secure access control.
 
-Roles:
-
+👥 Roles
 🛠️ Admin
-Full system access
-Can add, edit, delete expenses
-Manage budgets and categories
-Set goals
+Full access
+Manage expenses, budgets, goals
 Import CSV
 Generate reports
 👀 Viewer
 Read-only access
-Can view dashboard, insights and reports
-Cannot modify any data
-
-How it works:
-
-Role (admin / viewer) stored in user model
-Embedded inside JWT token
-Every request passes through:
-Authentication middleware (verify JWT)
-Authorization middleware (check role)
+Can view dashboard & reports
+Cannot modify data
+⚙️ Implementation
+Role stored in user model (admin / viewer)
+Embedded in JWT
+Middleware flow:
+Authentication → verify token
+Authorization → check role
 if (user.role !== 'admin') {
   return res.status(403).json({ message: 'Access denied' });
 }
@@ -142,78 +130,75 @@ Backend
 Technology	Purpose
 Node.js 18+	Runtime — fast, non-blocking I/O
 Express.js 4	REST API framework
-MongoDB + Mongoose	Database — flexible schema for dynamic categories
-JWT	Stateless authentication
-bcryptjs	Password hashing (12 salt rounds)
-multer + csv-parser	CSV bulk import
-dotenv	Environment config management
-cors	Secure browser-API communication
+MongoDB + Mongoose	Flexible database
+JWT	Authentication
+bcryptjs	Password hashing
+multer + csv-parser	CSV import
+dotenv	Config management
+cors	API security
 
 Frontend
 Technology	Purpose
-HTML5 + CSS3	Structure and styling
-Vanilla JavaScript ES6+	Modular logic, Fetch API
-Chart.js 4	Data visualisation
-jsPDF	Client-side PDF report generation
-Google Fonts — Outfit + DM Sans	Fintech-grade typography
+HTML5 + CSS3	Structure & styling
+JavaScript ES6+	Logic
+Chart.js 4	Data visualization
+jsPDF	PDF generation
+Google Fonts	Typography
 
 🏗️ Architecture Patterns
-Pattern	How It's Used
-MVC	Models → Controllers → Routes → Frontend
-REST API	Clean endpoints, proper HTTP status codes
-JWT Middleware	Every protected route passes through auth.js
-Dynamic Budget Engine	recalculateSpending() syncs on every expense change
-Insight Engine	Percentage calculations, projections and comparisons
-RBAC Middleware	Restricts access based on user role
+Pattern	Usage
+MVC	Models → Controllers → Routes
+REST API	Clean endpoints
+JWT Middleware	Secures routes
+Dynamic Budget Engine	Real-time updates
+Insight Engine	Data analysis
+RBAC Middleware	Role-based access
 🔗 Links
 Resource	URL
 🌐 Live App	https://pocketwise.onrender.com
 📦 GitHub	https://github.com/agameraki/pocketwise
 
 🚀 Future Advancements
-
-🤖 AI spending predictions
-🗣️ Natural language expense entry
-🏦 Bank statement import via OCR
-📱 Progressive Web App
+🤖 AI predictions
+🗣️ Natural language input
+🏦 OCR bank import
+📱 PWA support
 💬 WhatsApp bot
 👥 Shared budgets
-🏆 Spending streaks & health score
+🏆 Financial score
 📈 Investment tracker
 
 💡 Why PocketWise is Actually Useful
-Regular Expense App	PocketWise
-Shows: "You spent ₹8,400 on food"	Says what to do next
-Shows transactions	Groups, analyzes, alerts
-Generic charts	Dynamic insights
-CSV export	Smart PDF report
-Fixed categories	Fully customizable
-Tracks spending	Plans decisions
+Regular App	PocketWise
+Shows past data	Guides decisions
+Transaction list	Insights + alerts
+Static charts	Smart projections
+CSV export	Actionable PDF
+Fixed categories	Fully dynamic
 🎯 Target User
 
-A 23-year-old software fresher earning ₹35,000/month:
+A 23-year-old earning ₹35,000/month:
 
 Rent ₹12,000
 Food delivery addiction
-EMI on a phone
-OTT subscriptions
+EMI + subscriptions
 Sends money home
 
-By month 3 — ₹0 saved and no idea why.
+👉 Ends with ₹0 savings
 
-PocketWise tells them:
+PocketWise helps by:
 
-Where money went
-What to fix
-Exact daily number to follow
+Showing where money went
+Giving daily spending limits
+Providing clear actions
 🏁 Summary
 
-PocketWise is a production-ready, full-stack FinTech application that solves a real problem for a real audience.
+PocketWise is a production-ready full-stack FinTech application.
 
-✅ Strong backend architecture
-✅ Real business logic
-✅ Clean frontend
+✅ Strong backend
+✅ Real financial logic
+✅ Clean UI
 ✅ Deployment ready
-✅ Resume quality
+✅ Resume-ready project
 
 Built with 💚 and a lot of financial anxiety
