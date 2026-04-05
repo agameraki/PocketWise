@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PocketWise – Setup</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
+</head>
+<body class="setup-page">
+
+  <div class="setup-container">
+
+    <!-- Brand -->
+    <div class="setup-logo">
+      <div class="setup-logo-icon">
+        <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="14" stroke="white" stroke-width="2" stroke-opacity="0.4"/>
+          <path d="M11 17h12M17 11v12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="17" cy="17" r="4" fill="white" fill-opacity="0.85"/>
+        </svg>
+      </div>
+      <span class="setup-logo-name">PocketWise</span>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="setup-steps">
+      <div class="step-dot active" id="step-dot-1">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="step-dot-2">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="step-dot-3">3</div>
+    </div>
+
+    <!-- Alert -->
+    <div class="auth-alert hidden" id="setup-alert"></div>
+
+    <!-- Step 1: Income -->
+    <div id="step-1">
+      <div class="card" style="max-width:520px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;margin-bottom:8px;">What is your monthly income?</h2>
+        <p class="text-muted" style="margin-bottom:24px;">This helps us suggest how to allocate your budget across categories.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="monthly-income">Monthly Income (₹)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">₹</span>
+            <input type="number" id="monthly-income" class="form-input" placeholder="e.g. 50000" min="1" required />
+          </div>
+          <span class="field-error" id="income-err"></span>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="goToStep2()" style="margin-top:8px;">
+          Next — See Suggested Budget →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Categories -->
+    <div class="hidden" id="step-2">
+      <div class="card" style="max-width:640px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;margin-bottom:8px;">Customize your budget</h2>
+        <p class="text-muted" style="margin-bottom:20px;">We've suggested allocations based on your income. Edit, delete or add categories freely.</p>
+
+        <!-- Summary bar -->
+        <div class="setup-summary">
+          <div class="summary-item">
+            <span class="summary-item-label">Income</span>
+            <span class="summary-item-value" id="summary-income">₹0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-item-label">Allocated</span>
+            <span class="summary-item-value" id="summary-allocated">₹0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-item-label">Unallocated</span>
+            <span class="summary-item-value" id="summary-unallocated">₹0</span>
+          </div>
+        </div>
+
+        <!-- Category list rendered by JS -->
+        <div id="category-list" style="margin:16px 0;display:flex;flex-direction:column;gap:8px;"></div>
+
+        <!-- Add custom category -->
+        <div class="add-category-row" style="margin-bottom:20px;">
+          <input type="text"   id="new-cat-name"   class="form-input" placeholder="Category name (e.g. Gym)" maxlength="50" aria-label="New category name" />
+          <input type="number" id="new-cat-amount" class="form-input" placeholder="Amount (₹)" min="1" aria-label="New category amount" />
+          <button class="btn btn-secondary btn-sm" onclick="addCustomCategory()">+ Add</button>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button class="btn btn-ghost" onclick="goToStep1()">← Back</button>
+          <button class="btn btn-primary" id="save-setup-btn" onclick="saveSetup()">
+            <span class="btn-text">Save & Go to Dashboard</span>
+            <span class="btn-loader hidden">Saving...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Done -->
+    <div class="hidden" id="step-3">
+      <div class="card text-center" style="max-width:480px;margin:0 auto;padding:48px 32px;">
+        <div class="setup-done-icon">🎉</div>
+        <h2 style="font-family:var(--font-display);font-size:1.8rem;font-weight:800;margin-bottom:12px;">You're all set!</h2>
+        <p class="text-muted">Your financial profile is ready. Redirecting to your dashboard...</p>
+        <div class="redirect-bar-track">
+          <div id="redirect-bar"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/setup.js"></script>
+</body>
+</html>
